@@ -64,3 +64,7 @@ Ensure you have the necessary libraries installed. Use the following command to 
 
 ```bash
 pip install elasticsearch pandas
+
+### DATA SET:
+
+   The dataset can be downloaded from Kaggle: Employee Sample Data.

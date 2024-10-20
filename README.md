@@ -8,11 +8,7 @@ This project demonstrates how to use Elasticsearch to index and query employee d
 - [Project Overview](#project-overview)
 - [Prerequisites](#prerequisites)
 - [Installation Instructions](#installation-instructions)
-- [Dataset](#dataset)
-- [Function Definitions](#function-definitions)
-- [Function Executions](#function-executions)
-- [GitHub Repository Setup](#github-repository-setup)
-- [License](#license)
+
 
 ## Project Overview
 

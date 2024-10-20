@@ -1,0 +1,48 @@
+from elasticsearch import Elasticsearch, helpers
+import pandas as pd
+
+# Connect to Elasticsearch
+es = Elasticsearch()
+
+def createCollection(p_collection_name):
+    """Create a new collection in Elasticsearch."""
+    es.indices.create(index=p_collection_name, ignore=400)
+
+def indexData(p_collection_name, p_exclude_column):
+    """Index employee data into the specified collection, excluding the specified column."""
+    df = pd.read_csv('Employee Sample Data.csv')  # Ensure the correct path
+    df = df.drop(columns=[p_exclude_column])  # Drop the excluded column
+    records = df.to_dict(orient='records')  # Convert DataFrame to dictionary
+
+    # Index the data into Elasticsearch
+    helpers.bulk(es, [{'_index': p_collection_name, '_source': record} for record in records])
+
+def searchByColumn(p_collection_name, p_column_name, p_column_value):
+    """Search for records where the specified column matches the provided value."""
+    query = {
+        "query": {
+            "match": {p_column_name: p_column_value}
+        }
+    }
+    return es.search(index=p_collection_name, body=query)
+
+def getEmpCount(p_collection_name):
+    """Get the count of employees in the specified collection."""
+    return es.count(index=p_collection_name)
+
+def delEmpById(p_collection_name, p_employee_id):
+    """Delete an employee record by its ID from the specified collection."""
+    es.delete(index=p_collection_name, id=p_employee_id)
+
+def getDepFacet(p_collection_name):
+    """Retrieve the count of employees grouped by department."""
+    query = {
+        "aggs": {
+            "departments": {
+                "terms": {
+                    "field": "Department.keyword"
+                }
+            }
+        }
+    }
+    return es.search(index=p_collection_name, body=query)
